@@ -12,10 +12,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // Route that receives a POST request to /sms
 router.post('/test',(req, res) =>{
-  const body = req.body.Body
+  const body = req.body
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
-  console.log(req.body);
+  console.log("user: "+req.body.user+" pass: "+req.body.password);
 })
 
 // Tell our app to listen on port 5000
