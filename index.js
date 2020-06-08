@@ -15,7 +15,7 @@ router.post('/test',(req, res) =>{
   const body = req.body.Body
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
-  console.log(request.body);
+  console.log(req.body);
 })
 
 // Tell our app to listen on port 5000
