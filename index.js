@@ -17,7 +17,7 @@ router.get('/',(req, res) =>{
 	if(body == ""){
 	res.send('Powering up, Server Online')
 	}else{
-	res.send('Powering up, Server Online\n\n'+`You sent: ${body} to server`)}
+	res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server`)}
 })
 
 router.post('/',(req, res) =>{
