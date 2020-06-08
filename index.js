@@ -16,7 +16,7 @@ router.get('/',(req, res) =>{
 	res.send('Powering up, Server Online')
 })
 
-router.post('/test',(req, res) =>{
+router.post('/',(req, res) =>{
   const body = req.body.user
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
