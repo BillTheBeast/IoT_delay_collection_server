@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // Route that receives a POST request to /sms
 router.get('/',(req, res) =>{
 	if(body == ""){
-	res.send('Powering up, Server Online)
+	res.send('Powering up, Server Online')
 	}else{
 	res.send('Powering up, Server Online\n\n'+`You sent: ${body} to server`)}
 })
