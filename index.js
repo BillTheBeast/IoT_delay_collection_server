@@ -7,17 +7,18 @@ const PORT = process.env.PORT || 3000
 // Create a new instance of express
 const router = express.Router();
 const app = express()
+const body
 
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // Route that receives a POST request to /sms
 router.get('/',(req, res) =>{
-	res.send('Powering up, Server Online')
+	res.send('Powering up, Server Online'+`You sent: ${body} to Express`)
 })
 
 router.post('/',(req, res) =>{
-  const body = req.body.user
+  body = req.body.user
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
   console.log("user: "+req.body.user+" pass: "+req.body.password);
