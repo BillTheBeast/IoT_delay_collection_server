@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // Route that receives a POST request to /sms
 router.post('/test',(req, res) =>{
-  const body = req.body
+  const body = req.body.user
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
   console.log("user: "+req.body.user+" pass: "+req.body.password);
