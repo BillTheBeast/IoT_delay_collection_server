@@ -2,6 +2,7 @@
 
 const express = require('express')
 const bodyParser = require('body-parser')
+const PORT = process.env.PORT || 3000
 
 // Create a new instance of express
 const router = express.Router();
@@ -19,7 +20,7 @@ router.post('/test',(req, res) =>{
 })
 
 // Tell our app to listen on port 5000
-app.listen(5000,() =>{
+app.listen(PORT,() =>{
   console.log('Server started on port 5000')
 })
 
