@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000
 // Create a new instance of express
 const router = express.Router();
 const app = express()
-const body
+var body = ""
 
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
