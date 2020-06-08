@@ -12,6 +12,10 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // Route that receives a POST request to /sms
+router.get('/',(req, res) =>{
+	res.send('Powering up, Server Online')
+})
+
 router.post('/test',(req, res) =>{
   const body = req.body.user
   res.set('Content-Type', 'text/plain')
