@@ -10,7 +10,7 @@ const app = express()
 var body = ""
 var rtime = 0
 var msg = ""
-var arraystorage = []
+var arraystorage = new Array()
 
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -26,7 +26,7 @@ router.get('/',(req, res) =>{
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
 		res.set('Content-Type', 'text/plain')
-		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
+		res.write('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
 		`Receive time: ${hour}:${minute}:${second}.${msecond}`)}
 		
 	for(i=0;i<arraystorage.length;i++){
@@ -35,9 +35,10 @@ router.get('/',(req, res) =>{
 		let minute = time.getMinutes()
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
-		res.send(`User: ${arraystorage[i].user} Pass: ${arraystorage[i].pass} 
-		Receive time: ${hour}:${minute}:${second}.${msecond}`)
+		res.write(`User: ${arraystorage[i].user} Pass: ${arraystorage[i].pass} 
+		Receive time: ${hour}:${minute}:${second}.${msecond}\r\n`)
 	}
+	res.end()
 })
 
 router.post('/',(req, res) =>{
