@@ -8,19 +8,28 @@ const PORT = process.env.PORT || 3000
 const router = express.Router();
 const app = express()
 var body = ""
+var rtime = 0
 
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
 
 // Route that receives a POST request to /sms
 router.get('/',(req, res) =>{
-	if(body == ""){
-	res.send('Powering up, Server Online')
+	if(body == "")||(rtime ==0){
+		res.send('Powering up, Server Online')
 	}else{
-	res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server`)}
+		let time = new Date(rtime)
+		let hour = time.getHours()
+		let minute = time.getMinutes()
+		let second = time.getSeconds()
+		let msecond = time.getMilliseconds()
+		res.set('Content-Type', 'text/plain')
+		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n'`+
+		` Receive time: $(hour):$(minute):$(second).$(msecond)`)}
 })
 
 router.post('/',(req, res) =>{
+	rtime =Date.now()
   body = req.body.user
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
