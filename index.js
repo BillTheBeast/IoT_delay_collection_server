@@ -10,8 +10,6 @@ const router = express.Router();
 const app = express()
 var body = ""
 var rtime = 0
-var msg = `User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} |`+
-		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n`
 var info = ""
 var arraystorage = new Array()
 var printstring = ""
