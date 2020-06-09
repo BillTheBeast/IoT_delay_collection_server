@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // Route that receives a POST request to /sms
 router.get('/',(req, res) =>{
-	if(body == "")||(rtime ==0){
+	if(body == ""||rtime ==0){
 		res.send('Powering up, Server Online')
 	}else{
 		let time = new Date(rtime)
