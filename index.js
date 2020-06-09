@@ -29,7 +29,7 @@ async function processLineByLine(){
 		for await (const line of rl){
 			const data = line.split('|')
 			if(data.length < 2){
-				return
+				continue
 			}else{
 				info = {user:data[0],pass:data[1],rtime:data[2]}
 				arraystorage.push(info)
