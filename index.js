@@ -3,6 +3,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs')
+const readline =require('readline')
 const PORT = process.env.PORT || 3000
 
 // Create a new instance of express
@@ -21,6 +22,23 @@ if(!fs.existsSync('messagelog.txt')){
 	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:", function(err){
 	  if(err) throw err;
   })
+}else{
+	const fileStream = fs.createReadStream('messagelog.txt')
+	
+	const rl = readline.createInterface({
+		input: fileStream,
+		crlfDelay: Infinity
+	})
+	
+	for (const line of rl){
+		const data = line.split('|')
+		if(data.length < 2){
+			return
+		}else{
+			info = {user:data[0],pass:data[1],rtime:data[2]}
+			arraystorage.push(info)
+		}
+	}
 }
 
 // Route that receives a POST request to /sms
@@ -53,8 +71,8 @@ router.post('/',(req, res) =>{
 	rtime =Date.now()
   body = req.body.user
   info = {user:req.body.user,pass:req.body.password,rtime:rtime}
-  fs.appendFile('messagelog.txt', `User: ${info.user} | Pass: ${info.pass} |`+
-		`Rtime: ${info.rtime}\r\n`, function(err){
+  fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
+		`${info.rtime}\r\n`, function(err){
 	  if(err) throw err;
   })
   arraystorage.push(info)
