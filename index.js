@@ -36,7 +36,7 @@ router.get('/',(req, res) =>{
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
 		res.send(`User: ${arraystorage[i].user} Pass: ${arraystorage[i].pass} 
-		Receive time: ${hour}:${minute}:${second}.${msecond}`)}
+		Receive time: ${hour}:${minute}:${second}.${msecond}`)
 	}
 })
 
