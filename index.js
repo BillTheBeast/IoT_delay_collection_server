@@ -44,7 +44,8 @@ router.get('/',(req, res) =>{
 		let minute = ("0"+time.getMinutes()).slice(-2)
 		let second = ("0"+time.getSeconds()).slice(-2)
 		let msecond = time.getMilliseconds()
-		printstring=printstring+msg
+		printstring=printstring+`User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} |`+
+		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n`
 	}
 	res.set('Content-Type', 'text/plain')
 	res.send(printstring)
@@ -54,7 +55,8 @@ router.post('/',(req, res) =>{
 	rtime =Date.now()
   body = req.body.user
   info = {user:req.body.user,pass:req.body.password,rtime:rtime}
-  fs.appendFile('messagelog.txt', msg, function(err){
+  fs.appendFile('messagelog.txt', `User: ${info.user} | Pass: ${info.pass} |`+
+		`Rtime: ${info.rtime}\r\n`, function(err){
 	  if(err) throw err;
   })
   arraystorage.push(info)
