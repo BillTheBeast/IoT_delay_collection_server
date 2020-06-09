@@ -60,6 +60,7 @@ router.get('/',(req, res) =>{
 		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
 		
 	for(let i=0;i<arraystorage.length;i++){
+		console.log("Rtime: "+arraystorage[i].rtime]);
 		let time = new Date(arraystorage[i].rtime)
 		let hour = time.getHours()
 		let minute = ("0"+time.getMinutes()).slice(-2)
