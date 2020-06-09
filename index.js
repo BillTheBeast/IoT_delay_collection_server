@@ -38,7 +38,7 @@ async function processLineByLine(){
 }
 
 if(!fs.existsSync('messagelog.txt')){
-	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:", function(err){
+	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:\n", function(err){
 	  if(err) throw err;
   })
 }else{
@@ -48,7 +48,7 @@ if(!fs.existsSync('messagelog.txt')){
 // Route that receives a POST request to /sms
 router.get('/',(req, res) =>{
 	if(body == ""||rtime ==0){
-		printstring='Powering up, Server Online'
+		printstring='Powering up, Server Online\r\n\r\n'
 	}else{
 		let time = new Date(rtime)
 		let hour = time.getHours()
