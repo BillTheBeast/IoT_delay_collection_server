@@ -29,7 +29,7 @@ router.get('/',(req, res) =>{
 		printstring='Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
 		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
 		
-	for(i=0;i<arraystorage.length;i++){
+	for(let i=0;i<arraystorage.length;i++){
 		let time = new Date(arraystorage[i].rtime)
 		let hour = time.getHours()
 		let minute = time.getMinutes()
