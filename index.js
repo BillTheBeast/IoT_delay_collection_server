@@ -54,9 +54,9 @@ router.post('/',(req, res) =>{
 	rtime =Date.now()
   body = req.body.user
   info = {user:req.body.user,pass:req.body.password,rtime:rtime}
-  fs.appendFile('messagelog.txt', msg, function(err)){
+  fs.appendFile('messagelog.txt', msg, function(err){
 	  if(err) throw err;
-  }
+  })
   arraystorage.push(info)
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
