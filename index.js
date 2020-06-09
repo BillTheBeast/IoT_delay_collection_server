@@ -20,9 +20,9 @@ var printstring = ""
 app.use(bodyParser.urlencoded({ extended: false }))
 
 if(!fs.existsSync('messagelog.txt')){
-	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:", function(err)){
+	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:", function(err){
 	  if(err) throw err;
-  }
+  })
 }
 
 // Route that receives a POST request to /sms
