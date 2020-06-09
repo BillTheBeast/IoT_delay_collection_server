@@ -18,27 +18,31 @@ var printstring = ""
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
 
+async function processLineByLine(){
+	const fileStream = fs.createReadStream('messagelog.txt')
+		
+		const rl = readline.createInterface({
+			input: fileStream,
+			crlfDelay: Infinity
+		})
+		
+		for (const line of rl){
+			const data = line.split('|')
+			if(data.length < 2){
+				return
+			}else{
+				info = {user:data[0],pass:data[1],rtime:data[2]}
+				arraystorage.push(info)
+			}
+		}
+}
+
 if(!fs.existsSync('messagelog.txt')){
 	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:", function(err){
 	  if(err) throw err;
   })
 }else{
-	const fileStream = fs.createReadStream('messagelog.txt')
-	
-	const rl = readline.createInterface({
-		input: fileStream,
-		crlfDelay: Infinity
-	})
-	
-	for (const line of rl){
-		const data = line.split('|')
-		if(data.length < 2){
-			return
-		}else{
-			info = {user:data[0],pass:data[1],rtime:data[2]}
-			arraystorage.push(info)
-		}
-	}
+	processLineByLine()
 }
 
 // Route that receives a POST request to /sms
