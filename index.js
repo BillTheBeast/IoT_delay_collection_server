@@ -26,7 +26,7 @@ router.get('/',(req, res) =>{
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
 		res.set('Content-Type', 'text/plain')
-		res.write('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
+		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
 		`Receive time: ${hour}:${minute}:${second}.${msecond}`)}
 		
 	for(i=0;i<arraystorage.length;i++){
