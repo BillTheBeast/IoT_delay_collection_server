@@ -66,8 +66,9 @@ router.get('/',(req, res) =>{
 		let minute = ("0"+time.getMinutes()).slice(-2)
 		let second = ("0"+time.getSeconds()).slice(-2)
 		let msecond = time.getMilliseconds()
-		printstring=printstring+`User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} |`+
-		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n`
+		printstring=printstring+`User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} | `+
+		`Receive time: ${hour}:${minute}:${second}.${msecond} | Id: ${arraystorage[i].id} | `+
+		`Data: ${arraystorage[i].data} | Sent time: ${arraystorage[i].stime}\r\n`
 	}
 	res.set('Content-Type', 'text/plain')
 	res.send(printstring)
