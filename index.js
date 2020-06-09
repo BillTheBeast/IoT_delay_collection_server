@@ -26,7 +26,7 @@ async function processLineByLine(){
 			crlfDelay: Infinity
 		})
 		
-		for (const line of rl){
+		for await (const line of rl){
 			const data = line.split('|')
 			if(data.length < 2){
 				return
