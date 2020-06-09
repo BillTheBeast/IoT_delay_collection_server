@@ -32,7 +32,7 @@ async function processLineByLine(){
 				continue
 			}else{
 				console.log("user: "+data[0]+" pass: "+data[1]+" Rtime: "+data[2]);
-				info = {user:data[0],pass:data[1],rtime:parseInt(data[2])}
+				info = {user:data[0],pass:data[1],rtime:parseInt(data[2]),id:data[3],data:data[4],stime:parseInt(data[5])}
 				arraystorage.push(info)
 			}
 		}
@@ -76,9 +76,9 @@ router.get('/',(req, res) =>{
 router.post('/',(req, res) =>{
 	rtime =Date.now()
   body = req.body.user
-  info = {user:req.body.user,pass:req.body.password,rtime:rtime}
+  info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
   fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
-		`${info.rtime}\r\n`, function(err){
+		`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
 	  if(err) throw err;
   })
   arraystorage.push(info)
