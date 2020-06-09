@@ -28,6 +28,16 @@ router.get('/',(req, res) =>{
 		res.set('Content-Type', 'text/plain')
 		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
 		`Receive time: ${hour}:${minute}:${second}.${msecond}`)}
+		
+	for(i=0;i<arraystorage.length;i++){
+		let time = new Date(arraystorage[i].rtime)
+		let hour = time.getHours()
+		let minute = time.getMinutes()
+		let second = time.getSeconds()
+		let msecond = time.getMilliseconds()
+		res.send(`User: ${arraystorage[i].user} Pass: ${arraystorage[i].pass} 
+		Receive time: ${hour}:${minute}:${second}.${msecond}`)}
+	}
 })
 
 router.post('/',(req, res) =>{
