@@ -24,8 +24,8 @@ router.get('/',(req, res) =>{
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
 		res.set('Content-Type', 'text/plain')
-		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n'`+
-		` Receive time: $(hour):$(minute):$(second).$(msecond)`)}
+		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
+		`Receive time: ${hour}:${minute}:${second}.${msecond}`)}
 })
 
 router.post('/',(req, res) =>{
@@ -33,7 +33,7 @@ router.post('/',(req, res) =>{
   body = req.body.user
   res.set('Content-Type', 'text/plain')
   res.send(`You sent: ${body} to Express`)
-  console.log("user: "+req.body.user+" pass: "+req.body.password);
+  console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime);
 })
 
 // Tell our app to listen on port 5000
