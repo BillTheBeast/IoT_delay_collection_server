@@ -31,6 +31,7 @@ async function processLineByLine(){
 			if(data.length < 2){
 				continue
 			}else{
+				console.log("user: "+data[0]+" pass: "+data[1]+" Rtime: "+data[2]);
 				info = {user:data[0],pass:data[1],rtime:data[2]}
 				arraystorage.push(info)
 			}
