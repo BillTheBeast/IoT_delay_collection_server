@@ -11,6 +11,7 @@ var body = ""
 var rtime = 0
 var msg = ""
 var arraystorage = new Array()
+var printstring = ""
 
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -18,16 +19,15 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // Route that receives a POST request to /sms
 router.get('/',(req, res) =>{
 	if(body == ""||rtime ==0){
-		res.send('Powering up, Server Online')
+		printstring='Powering up, Server Online'
 	}else{
 		let time = new Date(rtime)
 		let hour = time.getHours()
 		let minute = time.getMinutes()
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
-		res.set('Content-Type', 'text/plain')
-		res.send('Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
-		`Receive time: ${hour}:${minute}:${second}.${msecond}`)}
+		printstring='Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
+		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
 		
 	for(i=0;i<arraystorage.length;i++){
 		let time = new Date(arraystorage[i].rtime)
@@ -35,10 +35,11 @@ router.get('/',(req, res) =>{
 		let minute = time.getMinutes()
 		let second = time.getSeconds()
 		let msecond = time.getMilliseconds()
-		res.write(`User: ${arraystorage[i].user} Pass: ${arraystorage[i].pass} 
-		Receive time: ${hour}:${minute}:${second}.${msecond}\r\n`)
+		printstring=printstring+`User: ${arraystorage[i].user} Pass: ${arraystorage[i].pass} 
+		Receive time: ${hour}:${minute}:${second}.${msecond}\r\n`
 	}
-	res.end()
+	res.set('Content-Type', 'text/plain')
+	res.send(printstring)
 })
 
 router.post('/',(req, res) =>{
