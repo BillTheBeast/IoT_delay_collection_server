@@ -4,6 +4,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const readline =require('readline')
+const {Pool} = require('pg')
 const PORT = process.env.PORT || 3000
 
 // Create a new instance of express
@@ -17,6 +18,13 @@ var printstring = ""
 
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
+
+const pool = new Pool({
+	connectionString: process.env.DATABASE_URL,
+	ssl:{
+		rejectUnauthorized: false
+	}
+})
 
 async function processLineByLine(){
 	const fileStream = fs.createReadStream('messagelog.txt')
@@ -38,6 +46,14 @@ async function processLineByLine(){
 		}
 }
 
+const client = await pool.connect()
+client.query("IF(EXISTS(SELECT *
+						FROM INFORMATION_SCHEMA.TABLES
+						WHERE TABLE_SCHEMA = ''
+))")
+
+const result = await client.query('SELECT * FROM msg_table')
+
 if(!fs.existsSync('messagelog.txt')){
 	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:\n", function(err){
 	  if(err) throw err;
@@ -46,7 +62,7 @@ if(!fs.existsSync('messagelog.txt')){
 	processLineByLine()
 }
 
-// Route that receives a POST request to /sms
+// Route that receives a GET request 
 router.get('/',(req, res) =>{
 	if(body == ""||rtime ==0){
 		printstring='Powering up, Server Online\r\n\r\n'
@@ -74,6 +90,7 @@ router.get('/',(req, res) =>{
 	res.send(printstring)
 })
 
+// Route that receives a POST request 
 router.post('/',(req, res) =>{
 	rtime =Date.now()
   body = req.body.user
