@@ -4,8 +4,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const fs = require('fs')
 const readline =require('readline')
-const {Pool} = require('pg')
-const PORT = process.env.PORT || 3000
+//const {Pool} = require('pg')
+const PORT = process.env.PORT || 80
 
 // Create a new instance of express
 const router = express.Router();
@@ -19,12 +19,12 @@ var printstring = ""
 // Tell express to use the body-parser middleware and to not parse extended bodies
 app.use(bodyParser.urlencoded({ extended: false }))
 
-const pool = new Pool({
+/*const pool = new Pool({
 	connectionString: process.env.DATABASE_URL,
 	ssl:{
 		rejectUnauthorized: false
 	}
-})
+})*/
 
 async function processLineByLine(){
 	const fileStream = fs.createReadStream('messagelog.txt')
@@ -46,13 +46,13 @@ async function processLineByLine(){
 		}
 }
 
-const client = await pool.connect()
+/*const client = await pool.connect()
 client.query("IF(EXISTS(SELECT *
 						FROM INFORMATION_SCHEMA.TABLES
 						WHERE TABLE_SCHEMA = ''
 ))")
 
-const result = await client.query('SELECT * FROM msg_table')
+const result = await client.query('SELECT * FROM msg_table')*/
 
 if(!fs.existsSync('messagelog.txt')){
 	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:\n", function(err){
