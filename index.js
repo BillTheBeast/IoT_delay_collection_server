@@ -64,7 +64,7 @@ if(!fs.existsSync('messagelog.txt')){
 
 // Route that receives a GET request 
 router.get('/',(req, res) =>{
-	if(body == ""||rtime ==0){
+	if(rtime ==0){
 		printstring='Powering up, Server Online\r\n\r\n'
 	}else{
 		let time = new Date(rtime)
@@ -72,36 +72,44 @@ router.get('/',(req, res) =>{
 		let minute = ("0"+time.getMinutes()).slice(-2)
 		let second = ("0"+time.getSeconds()).slice(-2)
 		let msecond = time.getMilliseconds()
-		printstring='Powering up, Server Online\r\n\r\n'+`You sent: ${body} to server\r\n\r\n`+
-		`Receive time: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
+		printstring='Powering up, Server Online\r\n\r\n'+`Last message received at: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
 		
 	for(let i=0;i<arraystorage.length;i++){
-		console.log("Rtime: "+arraystorage[i].rtime);
 		let time = new Date(arraystorage[i].rtime)
 		let hour = time.getHours()
 		let minute = ("0"+time.getMinutes()).slice(-2)
 		let second = ("0"+time.getSeconds()).slice(-2)
 		let msecond = time.getMilliseconds()
+		let delay = arraystorage[i].rtime-arraystorage[i].stime
 		printstring=printstring+`User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} | `+
 		`Receive time: ${hour}:${minute}:${second}.${msecond} | Id: ${arraystorage[i].id} | `+
-		`Data: ${arraystorage[i].data} | Sent time: ${arraystorage[i].stime}\r\n`
+		`Data: ${arraystorage[i].data} | Sent time: ${arraystorage[i].stime} | Delay: ${delay}\r\n`
 	}
 	res.set('Content-Type', 'text/plain')
 	res.send(printstring)
 })
 
-// Route that receives a POST request 
-router.post('/',(req, res) =>{
+router.get('/rcv',(req, res) =>{
 	rtime =Date.now()
-  body = req.body.user
+  info = {user:req.query.user,pass:req.query.password,rtime:rtime,id:req.query.device,data:req.query.data,stime:req.query.stime}
+  fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
+		`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
+	  if(err) throw err;
+  })
+  arraystorage.push(info)
+  console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
+  "id: "+req.device.user+" data: "+req.query.data+" Stime: "+req.query.stime);
+})
+
+// Route that receives a POST request 
+router.post('/rcv',(req, res) =>{
+	rtime =Date.now()
   info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
   fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
 		`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
 	  if(err) throw err;
   })
   arraystorage.push(info)
-  res.set('Content-Type', 'text/plain')
-  res.send(`You sent: ${body} to Express`)
   console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime);
 })
 
