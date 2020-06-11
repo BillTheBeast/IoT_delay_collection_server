@@ -1,9 +1,0 @@
-Logs about the sent massages are below:
-derp|herp|1591737596293
-foo|bar|1591737618582
-foo|bar|1591739302681
-foo|undefined|1591875706795|7777|0|1591874365467
-foo|undefined|1591875957176|undefined|undefined|undefined
-foo|undefined|1591876121680|undefined|undefined|undefined
-foo|undefined|1591876260400|7777|0|undefined
-foo|bar|1591876327366|7777|0|1591876300000
