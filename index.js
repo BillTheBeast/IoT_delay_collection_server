@@ -89,7 +89,7 @@ router.get('/',(req, res) =>{
 	res.send(printstring)
 })
 
-router.get('/rcv',(req, res) =>{
+router.get('/rcv0',(req, res) =>{
 	rtime =Date.now()
   info = {user:req.query.user,pass:req.query.password,rtime:rtime,id:req.query.device,data:req.query.data,stime:req.query.stime}
   fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
@@ -102,7 +102,7 @@ router.get('/rcv',(req, res) =>{
 })
 
 // Route that receives a POST request 
-router.post('/rcv',(req, res) =>{
+router.post('/rcv0',(req, res) =>{
 	rtime =Date.now()
   info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
   fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
