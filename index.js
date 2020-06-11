@@ -62,6 +62,54 @@ if(!fs.existsSync('messagelog.txt')){
 	processLineByLine()
 }
 
+if(!fs.existsSync('illegalmassagelog.txt')){
+	fs.writeFile('illegalmassagelog.txt', "Logs about the illegal massages are below:\n", function(err){
+	  if(err) throw err;
+  })
+}
+
+async function checkDeviceKey(key){
+	const fileStream = fs.createReadStream('keystore.txt')
+		
+		const rl = readline.createInterface({
+			input: fileStream,
+			crlfDelay: Infinity
+		})
+		
+		for await (const line of rl){
+			const data = line.split('|')
+			if(data.length < 2){
+				continue
+			}else{
+				if(data[1] == key){
+					return true;
+				}
+			}
+		}
+		return false;
+}
+
+async function illegalLogWrite(key, rtime){
+	let hour = rtime.getHours()
+	let minute = ("0"+rtime.getMinutes()).slice(-2)
+	let second = ("0"+rtime.getSeconds()).slice(-2)
+	let msecond = rtime.getMilliseconds()
+	switch(key){
+		case 1:
+			fs.appendFile('illegalmessagelog.txt', `${hour}:${minute}:${second}.${msecond} | Invalid devicekey`, function(err){
+				if(err) throw err;
+			})
+			console.log(hour+":"+minute+":"+second+": Invalid key");
+			break;
+		case 2:
+			fs.appendFile('illegalmessagelog.txt', `${hour}:${minute}:${second}.${msecond} | Too long datacontent`, function(err){
+				if(err) throw err;
+			})
+			console.log(hour+":"+minute+":"+second+": Invalid data (too long)");
+			break;
+	}
+}
+
 // Route that receives a GET request 
 router.get('/',(req, res) =>{
 	if(rtime ==0){
@@ -91,26 +139,42 @@ router.get('/',(req, res) =>{
 
 router.get('/rcv0',(req, res) =>{
 	rtime =Date.now()
-  info = {user:req.query.user,pass:req.query.password,rtime:rtime,id:req.query.device,data:req.query.data,stime:req.query.stime}
-  fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
-		`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
-	  if(err) throw err;
-  })
-  arraystorage.push(info)
-  console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
-  "id: "+req.query.device+" data: "+req.query.data+" Stime: "+req.query.stime);
+	if(checkDeviceKey(req.query.password)){
+		if(req.body.data>20){
+			illegalLogWrite(2, rtime)
+		}else{
+			info = {user:req.query.user,pass:req.query.password,rtime:rtime,id:req.query.device,data:req.query.data,stime:req.query.stime}
+			fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
+			`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
+				if(err) throw err;
+			})
+			arraystorage.push(info)
+			console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
+			"id: "+req.query.device+" data: "+req.query.data+" Stime: "+req.query.stime);
+		}
+	}else{
+		illegalLogWrite(1, rtime)
+	}
 })
 
 // Route that receives a POST request 
 router.post('/rcv0',(req, res) =>{
 	rtime =Date.now()
-  info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
-  fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
-		`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
-	  if(err) throw err;
-  })
-  arraystorage.push(info)
-  console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime);
+	if(checkDeviceKey(req.body.password)){
+		if(req.body.data>20){
+			illegalLogWrite(2, rtime)
+		}else{
+			info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
+			fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
+			`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
+				if(err) throw err;
+			})
+			arraystorage.push(info)
+			console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime);
+		}
+	}else{
+		illegalLogWrite(1, rtime)
+	}
 })
 
 // Tell our app to listen on port 5000
