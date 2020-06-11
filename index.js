@@ -54,6 +54,7 @@ client.query("IF(EXISTS(SELECT *
 
 const result = await client.query('SELECT * FROM msg_table')*/
 
+// Checks if messagelog exists and loads its contents into memory
 if(!fs.existsSync('messagelog.txt')){
 	fs.writeFile('messagelog.txt', "Logs about the sent massages are below:\n", function(err){
 	  if(err) throw err;
@@ -62,12 +63,14 @@ if(!fs.existsSync('messagelog.txt')){
 	processLineByLine()
 }
 
+// Checks if illegalmessagelog exists
 if(!fs.existsSync('illegalmassagelog.txt')){
 	fs.writeFile('illegalmassagelog.txt', "Logs about the illegal massages are below:\n", function(err){
 	  if(err) throw err;
   })
 }
 
+// Compares sent devicekey to the ones in keystore to see if the sender is allowed to send things
 async function checkDeviceKey(key){
 	const fileStream = fs.createReadStream('keystore.txt')
 		
@@ -89,6 +92,7 @@ async function checkDeviceKey(key){
 		return false;
 }
 
+// Writes into illegalmessagelog when an illegal message is sent
 async function illegalLogWrite(key, rtime){
 	let hour = rtime.getHours()
 	let minute = ("0"+rtime.getMinutes()).slice(-2)
@@ -110,7 +114,7 @@ async function illegalLogWrite(key, rtime){
 	}
 }
 
-// Route that receives a GET request 
+// Accessing main page 
 router.get('/',(req, res) =>{
 	if(rtime ==0){
 		printstring='Powering up, Server Online\r\n\r\n'
@@ -137,6 +141,7 @@ router.get('/',(req, res) =>{
 	res.send(printstring)
 })
 
+// Route that receives a GET request
 router.get('/rcv0',(req, res) =>{
 	rtime =Date.now()
 	if(checkDeviceKey(req.query.password)){
@@ -177,7 +182,7 @@ router.post('/rcv0',(req, res) =>{
 	}
 })
 
-// Tell our app to listen on port 5000
+// Tell our app to listen on port 80
 app.listen(PORT,() =>{
   console.log('Server started on port 5000')
 })
