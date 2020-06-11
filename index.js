@@ -98,7 +98,7 @@ router.get('/rcv',(req, res) =>{
   })
   arraystorage.push(info)
   console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
-  "id: "+req.device.user+" data: "+req.query.data+" Stime: "+req.query.stime);
+  "id: "+req.query.device+" data: "+req.query.data+" Stime: "+req.query.stime);
 })
 
 // Route that receives a POST request 
