@@ -94,9 +94,10 @@ async function checkDeviceKey(key){
 
 // Writes into illegalmessagelog when an illegal message is sent
 async function illegalLogWrite(key, rtime){
-	let hour = rtime.getHours()
-	let minute = ("0"+rtime.getMinutes()).slice(-2)
-	let second = ("0"+rtime.getSeconds()).slice(-2)
+	let time = new Date(rtime)
+	let hour = time.getHours()
+	let minute = ("0"+time.getMinutes()).slice(-2)
+	let second = ("0"+time.getSeconds()).slice(-2)
 	let msecond = ("00"+time.getMilliseconds()).slice(-3)
 	switch(key){
 		case 1:
