@@ -97,7 +97,7 @@ async function illegalLogWrite(key, rtime){
 	let hour = rtime.getHours()
 	let minute = ("0"+rtime.getMinutes()).slice(-2)
 	let second = ("0"+rtime.getSeconds()).slice(-2)
-	let msecond = rtime.getMilliseconds()
+	let msecond = ("00"+time.getMilliseconds()).slice(-3)
 	switch(key){
 		case 1:
 			fs.appendFile('illegalmessagelog.txt', `${hour}:${minute}:${second}.${msecond} | Invalid devicekey`, function(err){
@@ -123,7 +123,7 @@ router.get('/',(req, res) =>{
 		let hour = time.getHours()
 		let minute = ("0"+time.getMinutes()).slice(-2)
 		let second = ("0"+time.getSeconds()).slice(-2)
-		let msecond = time.getMilliseconds()
+		let msecond = ("00"+time.getMilliseconds()).slice(-3)
 		printstring='Powering up, Server Online\r\n\r\n'+`Last message received at: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
 		
 	for(let i=0;i<arraystorage.length;i++){
@@ -131,8 +131,8 @@ router.get('/',(req, res) =>{
 		let hour = time.getHours()
 		let minute = ("0"+time.getMinutes()).slice(-2)
 		let second = ("0"+time.getSeconds()).slice(-2)
-		let msecond = time.getMilliseconds()
-		let delay = arraystorage[i].rtime-arraystorage[i].stime
+		let msecond = ("00"+time.getMilliseconds()).slice(-3)
+		let delay = arraystorage[i].rtime-(arraystorage[i].stime*1000)
 		printstring=printstring+`User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} | `+
 		`Receive time: ${hour}:${minute}:${second}.${msecond} | Id: ${arraystorage[i].id} | `+
 		`Data: ${arraystorage[i].data} | Sent time: ${arraystorage[i].stime} | Delay: ${delay}\r\n`
