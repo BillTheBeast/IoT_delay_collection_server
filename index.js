@@ -146,8 +146,9 @@ router.get('/',(req, res) =>{
 router.get('/rcv0',(req, res) =>{
 	rtime =Date.now()
 	if(checkDeviceKey(req.query.password)){
-		if(req.body.data>20){
+		if(req.query.data.length>20){
 			illegalLogWrite(2, rtime)
+			return;
 		}else{
 			info = {user:req.query.user,pass:req.query.password,rtime:rtime,id:req.query.device,data:req.query.data,stime:req.query.stime}
 			fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
@@ -167,8 +168,9 @@ router.get('/rcv0',(req, res) =>{
 router.post('/rcv0',(req, res) =>{
 	rtime =Date.now()
 	if(checkDeviceKey(req.body.password)){
-		if(req.body.data>20){
+		if(req.body.data.length>20){
 			illegalLogWrite(2, rtime)
+			return;
 		}else{
 			info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
 			fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
