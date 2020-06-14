@@ -37,7 +37,7 @@ async function processLineByLine(filetype,ftr){
 			case 1:
 				for await (const line of rl){
 					const data = line.split('|')
-					if(data.length < 2){
+					if(data.length < 6){
 						continue
 					}else{
 						//console.log("user: "+data[0]+" pass: "+data[1]+" Rtime: "+data[2]);
@@ -50,7 +50,7 @@ async function processLineByLine(filetype,ftr){
 				const receivestorage = new Array()
 				for await (const line of rl){
 					const data = line.split('|')
-					if(data.length < 2){
+					if(data.length < 6){
 						continue
 					}else{
 						//console.log("id: "+data[4]+" pass: "+data[1]+" Rtime: "+data[2]);
@@ -224,7 +224,7 @@ router.post('/rcv0',(req, res) =>{
 				if(err) throw err;
 			})
 			arraystorage.push(info)
-			res.send(`You sent:`)
+			res.send(`Message received \r\n`)
 			console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime+
 			"id: "+req.body.device+" data: "+req.body.data+" Stime: "+req.body.stime);
 		}
@@ -270,7 +270,7 @@ router.post('/fnctn0',async (req, res) =>{
 			}
 		}
 		console.log("Parsing complete");
-		res.send(`You sent:`)
+		res.send(`Parsing complete \r\n`)
 	}
 	if(req.body.key == 200){
 		console.log("Calculating delays...");
@@ -294,7 +294,7 @@ router.post('/fnctn0',async (req, res) =>{
 			//console.log("id: "+unit.id+" SRdelay: "+srdelay+" MRtime: "+mrdelay+" SMtime: "+smdelay);
 		}
 		console.log("Calculating complete");
-		res.send(`You sent:`)
+		res.send(`Calculating complete \r\n`)
 	}
 	
 })
