@@ -12,7 +12,7 @@ const router = express.Router();
 const app = express()
 var body = ""
 var rtime = 0
-var info = ""
+//var info = ""
 var arraystorage = new Array()
 var printstring = ""
 
@@ -33,15 +33,15 @@ async function processLineByLine(filetype,ftr){
 			input: fileStream,
 			crlfDelay: Infinity
 		})
-		switch(key){
+		switch(filetype){
 			case 1:
 				for await (const line of rl){
 					const data = line.split('|')
 					if(data.length < 2){
 						continue
 					}else{
-						console.log("user: "+data[0]+" pass: "+data[1]+" Rtime: "+data[2]);
-						info = {user:data[0],pass:data[1],rtime:parseInt(data[2]),id:data[3],data:data[4],stime:parseInt(data[5])}
+						//console.log("user: "+data[0]+" pass: "+data[1]+" Rtime: "+data[2]);
+						let info = {user:data[0],pass:data[1],rtime:parseInt(data[2]),id:data[3],data:data[4],stime:parseInt(data[5])}
 						arraystorage.push(info)
 					}
 				}
@@ -53,8 +53,8 @@ async function processLineByLine(filetype,ftr){
 					if(data.length < 2){
 						continue
 					}else{
-						console.log("id: "+data[3]+" pass: "+data[1]+" Rtime: "+data[2]);
-						let info = {id:data[3],pass:data[1],stime:parseInt(data[5]),rtime:parseInt(data[2])}
+						//console.log("id: "+data[4]+" pass: "+data[1]+" Rtime: "+data[2]);
+						let info = {id:parseInt((new Buffer.from(data[4], 'hex').toString())),pass:data[1],stime:parseInt(data[5]),rtime:parseInt(data[2])}
 						receivestorage.push(info)
 					}
 				}
@@ -66,7 +66,8 @@ async function processLineByLine(filetype,ftr){
 					if(data.length < 2){
 						continue
 					}else{
-						let info = {id:data[3],stime:parseInt(data[14])}
+						//console.log("id: "+data[3]+" Stime: "+data[14]);
+						let info = {id:parseInt(data[3]),stime:parseInt(data[14])}
 						sentstorage.push(info)
 					}
 				}
@@ -223,16 +224,21 @@ router.post('/rcv0',(req, res) =>{
 				if(err) throw err;
 			})
 			arraystorage.push(info)
-			console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime);
+			res.send(`You sent:`)
+			console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
+			"id: "+req.query.device+" data: "+req.query.data+" Stime: "+req.query.stime);
 		}
 	}else{
 		illegalLogWrite(1, rtime)
 	}
 })
 
-router.post('/fnctn0',(req, res) =>{
+router.post('/fnctn0',async (req, res) =>{
 	if(req.body.key == 100){
 		console.log("Parsing message logs...");
+		fs.writeFile('../messageinfolog.txt', "Logs about the sent massages are below:\r\n", function(err){
+			if(err) throw err;
+		})
 		if(req.body.rlog==null||!fs.existsSync(req.body.rlog)){
 			console.log("Error: Invalid receive log");
 			return;
@@ -241,60 +247,57 @@ router.post('/fnctn0',(req, res) =>{
 			console.log("Error: Invalid send log");
 			return;
 		}
-		const receivestorage = processLineByLine(2,req.body.rlog)
-		const sentstorage = processLineByLine(3,req.body.slog)
+		let receivestorage = await processLineByLine(2,req.body.rlog)
+		let sentstorage = await processLineByLine(3,req.body.slog)
 		
-		for(const runit of receivestorage){
-			for(const sunit of sentstorage){
+		for await(const runit of receivestorage){
+			//console.log("Rid: "+runit.id);
+			for await(const sunit of sentstorage){
+				//console.log("Sid: "+sunit.id);
 				if(runit.id == sunit.id){
 					let time = new Date(runit.rtime)
 					let hour = time.getHours()
 					let minute = ("0"+time.getMinutes()).slice(-2)
-					let day = time.getDay()+1
-					let date = time.getDate()
-					let month = time.getMonth()+1
-					if(!fs.existsSync('../messageinfolog.txt')){
-						fs.writeFile('../messageinfolog.txt', "Logs about the sent massages are below:\n", function(err){
-						if(err) throw err;
-						})
-					}
+					let day = time.getDay()
+					let date = ("0"+time.getDate()).slice(-2)
+					let month = ("0"+(time.getMonth()+1)).slice(-2)
 					fs.appendFile('../messageinfolog.txt', `${runit.id}|${runit.pass}|`+
-					`${sunit.stime}|${runit.stime}|${runit.rtime}|${day}|${hour}:${minute}|("0"+${date}).slice(-2).("0"+${month}).slice(-2)\r\n`, function(err){
+					`${sunit.stime}|${runit.stime}|${runit.rtime}|${day}|${hour}:${minute}|${date}.${month}\r\n`, function(err){
 						if(err) throw err;
 					})
-					console.log("id: "+runit.id+" Stime: "+sunit.stime+" Rtime: "+runit.rtime);
+					//console.log("id: "+runit.id+" Stime: "+sunit.stime+" Rtime: "+runit.rtime);
 				}
 			}
 		}
 		console.log("Parsing complete");
+		res.send(`You sent:`)
 	}
 	if(req.body.key == 200){
 		console.log("Calculating delays...");
+		fs.writeFile('../delaylog.txt', "Logs about the delays in massages are below:\r\n", function(err){
+			if(err) throw err;
+		})
 		if(req.body.log==null||!fs.existsSync(req.body.log)){
 			console.log("Error: Invalid log file");
-			break;
+			return;
 		}
-		const logstorage = processLineByLine(4,req.body.log)
+		let logstorage = await processLineByLine(4,req.body.log)
 		
-		for(const unit of logstorage){
-			if(!fs.existsSync('../delaylog.txt')){
-				fs.writeFile('../delaylog.txt', "Logs about the delays in massages are below:\n", function(err){
-				if(err) throw err;
-				})
-			}
-			let srdelay = unit.rtime-Math.round(unit.stime/1000)
+		for await(const unit of logstorage){
+			let srdelay = unit.rtime-Math.round(unit.stime/1000000)
 			let mrdelay = Math.round(unit.rtime/1000)-unit.mtime
-			let smdelay = unit.mtime-Math.round(unit.stime/1000000)
+			let smdelay = unit.mtime-Math.round(unit.stime/1000000000)
 			fs.appendFile('../delaylog.txt', `${unit.id}|${unit.pass}|`+
-			`${srdelay}|${mrdelay}|${smdelay}|${day}|${time}|${date}\r\n`, function(err){
+			`${srdelay}|${mrdelay}|${smdelay}|${unit.day}|${unit.time}|${unit.date}\r\n`, function(err){
 				if(err) throw err;
 			})
-			console.log("id: "+unit.id+" SRdelay: "+srdelay+" MRtime: "+mrdelay+" SMtime: "+smdelay);
+			//console.log("id: "+unit.id+" SRdelay: "+srdelay+" MRtime: "+mrdelay+" SMtime: "+smdelay);
 		}
 		console.log("Calculating complete");
+		res.send(`You sent:`)
 	}
 	
-}
+})
 
 // Tell our app to listen on port 80
 app.listen(PORT,() =>{
