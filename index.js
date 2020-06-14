@@ -235,11 +235,11 @@ router.post('/fnctn0',(req, res) =>{
 		console.log("Parsing message logs...");
 		if(req.body.rlog==null||!fs.existsSync(req.body.rlog)){
 			console.log("Error: Invalid receive log");
-			break;
+			return;
 		}
 		if(req.body.slog==null||!fs.existsSync(req.body.slog)){
 			console.log("Error: Invalid send log");
-			break;
+			return;
 		}
 		const receivestorage = processLineByLine(2,req.body.rlog)
 		const sentstorage = processLineByLine(3,req.body.slog)
