@@ -218,15 +218,15 @@ router.post('/rcv0',(req, res) =>{
 			illegalLogWrite(2, rtime)
 			return;
 		}else{
-			const info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:new Buffer(req.body.data, 'hex'),stime:req.body.stime}
+			let info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:req.body.data,stime:req.body.stime}
 			fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
 			`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
 				if(err) throw err;
 			})
 			arraystorage.push(info)
 			res.send(`You sent:`)
-			console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
-			"id: "+req.query.device+" data: "+req.query.data+" Stime: "+req.query.stime);
+			console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime+
+			"id: "+req.body.device+" data: "+req.body.data+" Stime: "+req.body.stime);
 		}
 	}else{
 		illegalLogWrite(1, rtime)
