@@ -218,7 +218,7 @@ router.post('/rcv0',(req, res) =>{
 			illegalLogWrite(2, rtime)
 			return;
 		}else{
-			info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:new Buffer(req.body.data, 'hex'),stime:req.body.stime}
+			const info = {user:req.body.user,pass:req.body.password,rtime:rtime,id:req.body.device,data:new Buffer(req.body.data, 'hex'),stime:req.body.stime}
 			fs.appendFile('messagelog.txt', `${info.user}|${info.pass}|`+
 			`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
 				if(err) throw err;
