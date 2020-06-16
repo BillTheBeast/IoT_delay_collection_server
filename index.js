@@ -103,7 +103,7 @@ if(!fs.existsSync('messagelog.txt')){
 	  if(err) throw err;
   })
 }else{
-	processLineByLine(1,'messagelog.txt')
+	/*processLineByLine(1,'messagelog.txt')*/
 }
 
 // Checks if illegalmessagelog exists
@@ -173,7 +173,7 @@ router.get('/',(req, res) =>{
 		let msecond = ("00"+time.getMilliseconds()).slice(-3)
 		printstring='Powering up, Server Online\r\n\r\n'+`Last message received at: ${hour}:${minute}:${second}.${msecond}\r\n\r\n`}
 		
-	for(let i=0;i<arraystorage.length;i++){
+	/*for(let i=0;i<arraystorage.length;i++){
 		let time = new Date(arraystorage[i].rtime)
 		let hour = time.getHours()
 		let minute = ("0"+time.getMinutes()).slice(-2)
@@ -183,7 +183,7 @@ router.get('/',(req, res) =>{
 		printstring=printstring+`User: ${arraystorage[i].user} | Pass: ${arraystorage[i].pass} | `+
 		`Receive time: ${hour}:${minute}:${second}.${msecond} | Id: ${arraystorage[i].id} | `+
 		`Data: ${arraystorage[i].data} | Sent time: ${arraystorage[i].stime} | Delay: ${delay}\r\n`
-	}
+	}*/
 	res.set('Content-Type', 'text/plain')
 	res.send(printstring)
 })
@@ -201,7 +201,7 @@ router.get('/rcv0',(req, res) =>{
 			`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
 				if(err) throw err;
 			})
-			arraystorage.push(info)
+			/*arraystorage.push(info)*/
 			console.log("user: "+req.query.user+" pass: "+req.query.password+" Rtime: "+rtime+
 			"id: "+req.query.device+" data: "+req.query.data+" Stime: "+req.query.stime);
 		}
@@ -223,7 +223,7 @@ router.post('/rcv0',(req, res) =>{
 			`${info.rtime}|${info.id}|${info.data}|${info.stime}\r\n`, function(err){
 				if(err) throw err;
 			})
-			arraystorage.push(info)
+			/*arraystorage.push(info)*/
 			res.send(`Message received \r\n`)
 			console.log("user: "+req.body.user+" pass: "+req.body.password+" Rtime: "+rtime+
 			"id: "+req.body.device+" data: "+req.body.data+" Stime: "+req.body.stime);
