@@ -236,9 +236,11 @@ router.post('/rcv0',(req, res) =>{
 router.post('/fnctn0',async (req, res) =>{
 	if(req.body.key == 100){
 		console.log("Parsing message logs...");
+		if(!fs.existsSync('../messageinfolog.txt')){
 		fs.writeFile('../messageinfolog.txt', "Logs about the sent massages are below:\r\n", function(err){
 			if(err) throw err;
 		})
+		}
 		if(req.body.rlog==null||!fs.existsSync(req.body.rlog)){
 			console.log("Error: Invalid receive log");
 			return;
@@ -274,9 +276,11 @@ router.post('/fnctn0',async (req, res) =>{
 	}
 	if(req.body.key == 200){
 		console.log("Calculating delays...");
+		if(!fs.existsSync('../delaylog.txt')){
 		fs.writeFile('../delaylog.txt', "Logs about the delays in massages are below:\r\n", function(err){
 			if(err) throw err;
 		})
+		}
 		if(req.body.log==null||!fs.existsSync(req.body.log)){
 			console.log("Error: Invalid log file");
 			return;
