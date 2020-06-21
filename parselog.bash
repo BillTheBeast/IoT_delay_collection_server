@@ -7,7 +7,7 @@ do
 	while IFS= read -r sline
 	do
 		echo "$sline" | awk -F" " '{snum = $4} {stime = $15} '
-		if [ xxd -r "$rnum" == "$snum"]
+		if [ (xxd -r "$rnum" )== "$snum"]
 		then
 		echo "$snum|$rtime|$mtime|$stime"
 		fi
