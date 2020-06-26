@@ -1,0 +1,2 @@
+Provide the location of messagelog to calculate delays from
+Provide the location of sent_messagelog|0|0|0|0|0
